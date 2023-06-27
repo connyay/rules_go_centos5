@@ -1,4 +1,6 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@rules_pkg//:pkg.bzl", "pkg_tar")
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_tarball")
 
 go_library(
     name = "lib",
@@ -8,9 +10,28 @@ go_library(
 )
 
 go_binary(
-    name = "bin",
+    name = "binary",
     embed = [":lib"],
     goarch = "amd64",
     goos = "linux",
     visibility = ["//visibility:public"],
+)
+
+
+pkg_tar(
+    name = "tar",
+    srcs = [":binary"],
+)
+
+oci_image(
+    name = "image",
+    base = "@centos5",
+    tars = [":tar"],
+    entrypoint = ["/binary"],
+)
+
+oci_tarball(
+    name = "tarball",
+    image = ":image",
+    repo_tags = ["centos5test:latest"],
 )
