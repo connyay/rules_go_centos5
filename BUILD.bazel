@@ -17,17 +17,19 @@ go_binary(
     visibility = ["//visibility:public"],
 )
 
-
 pkg_tar(
     name = "tar",
-    srcs = [":binary"],
+    srcs = [
+        "example.txt",
+        ":binary",
+    ],
 )
 
 oci_image(
     name = "image",
     base = "@centos5",
-    tars = [":tar"],
     entrypoint = ["/binary"],
+    tars = [":tar"],
 )
 
 oci_tarball(
