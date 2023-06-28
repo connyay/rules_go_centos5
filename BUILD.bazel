@@ -4,7 +4,10 @@ load("@rules_oci//oci:defs.bzl", "oci_image", "oci_tarball")
 
 go_library(
     name = "lib",
-    srcs = ["main.go"],
+    srcs = [
+        "main.go",
+        "serverclient.go",
+    ],
     importpath = "github.com/connyay/rules_go_centos5",
     visibility = ["//visibility:private"],
 )
